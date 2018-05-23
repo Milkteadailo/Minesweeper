@@ -2,44 +2,81 @@
 
 import de.bezier.guido.*;
 //Declare and initialize NUM_ROWS and NUM_COLS = 20
+public final static int NUM_ROWS = 20;
+public final static int NUM_COLS = 20;
+public final static int NUM_BOMBS = 20;
 private MSButton[][] buttons; //2d array of minesweeper buttons
-private ArrayList <MSButton> bombs; //ArrayList of just the minesweeper buttons that are mined
+private ArrayList < MSButton > bombs = new ArrayList < MSButton > (); //ArrayList of just the minesweeper buttons that are mined
 
-void setup ()
-{
+void setup() {
     size(400, 400);
-    textAlign(CENTER,CENTER);
-    
+    textAlign(CENTER, CENTER);
+
     // make the manager
-    Interactive.make( this );
-    
-    //your code to initialize buttons goes here
-    
-    
-    
+    Interactive.make(this);
+    buttons = new MSButton[NUM_ROWS][NUM_COLS];
+    for (int j = 0; j < NUM_ROWS; j++) {
+        for (int k = 0; k < NUM_COLS; k++) {
+            buttons[j][k] = new MSButton(j, k);
+        }
+    }
+    //declare and initialize buttons
     setBombs();
 }
-public void setBombs()
-{
-    //your code
+public void setBombs() {
+    for (int i = 0; i < NUM_BOMBS; i++) {
+        int aRow = (int)(Math.random() * NUM_ROWS);
+        int aCol = (int)(Math.random() * NUM_COLS);
+        if (!bombs.contains(buttons[aRow][aCol])) {
+            bombs.add(buttons[aRow][aCol]);
+        }
+    }
 }
 
-public void draw ()
-{
-    background( 0 );
-    if(isWon())
+public void draw() {
+    background(0);
+    if (isWon())
         displayWinningMessage();
 }
 public boolean isWon()
 {
-    //your code here
+    int markBombs= 0;
+    for(int i = 0; i < bombs.size(); i++)
+    {
+        if(bombs.get(i).isMarked() == true)
+        {
+            markBombs++;
+        }
+    }
+    if(markBombs == bombs.size())
+    {
+        return true;
+    }
+    for(int i = 0;i < bombs.size(); i++)
+    {
+        if(bombs.get(i).isClicked() == true)
+        {
+            displayLosingMessage();
+        }
+    }
     return false;
 }
-public void displayLosingMessage()
-{
+public void displayLosingMessage() {
     //your code here
-}
-public void displayWinningMessage()
+     for(int i=0;i<bombs.size();i++)
+    {
+        bombs.get(i).setClicked(true);
+    }
+    buttons[10][8].setLabel("N");
+    buttons[10][9].setLabel("I");
+    buttons[10][10].setLabel("C");
+    buttons[10][11].setLabel("E");
+    buttons[11][8].setLabel("T");
+    buttons[11][9].setLabel("R");
+    buttons[11][10].setLabel("Y");
+    buttons[11][11].setLabel("!");
+    
+}public void displayWinningMessage()
 {
     //your code here
 }
